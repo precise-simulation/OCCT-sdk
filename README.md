@@ -25,13 +25,57 @@ live under `.github/occt-sdk-release/`.
 
 ## Current release
 
-`occt-sdk-8.0.1` is the canonical baseline release for new consumers. It was
+The [`occt-sdk-8.0.1`](https://github.com/precise-simulation/OCCT-sdk/releases/tag/occt-sdk-8.0.1)
+release is the canonical baseline for new consumers. It was
 qualified and published from automation revision
 `84bfd579cf6f660a63e4cad06a6c23742df579c3` using official upstream OCCT
 `V8.0.1` source commit `b8f597c677811d1f9f4d8a97f5ae2825c0353a42`.
 The immutable release contains 18 assets: the qualified Windows, Linux, and
 macOS SDK packages and checksums plus the exact upstream source archive and
 checksum.
+
+## Consumer quickstart
+
+For example, download and verify the Linux x86_64 shared SDK, then extract it:
+
+```bash
+release_url=https://github.com/precise-simulation/OCCT-sdk/releases/download/occt-sdk-8.0.1
+asset=opencascade-8.0.1-linux-x86_64-glibc2.17-shared-b8f597c67781.tar.gz
+curl -fLO "$release_url/$asset"
+curl -fLO "$release_url/$asset.sha256"
+sha256sum -c "$asset.sha256"
+tar -xzf "$asset"
+```
+
+Point CMake at the package configuration in the extracted SDK and require the
+config package from your project:
+
+```cmake
+find_package(OpenCASCADE CONFIG REQUIRED)
+target_link_libraries(my_target PRIVATE TKDESTEP TKDEIGES TKDESTL TKOffset TKMesh)
+```
+
+```bash
+sdk_dir="$PWD/${asset%.tar.gz}"
+cmake -S . -B build -DOpenCASCADE_DIR="$sdk_dir/lib/cmake/opencascade"
+cmake --build build
+```
+
+Choose the release asset that matches the target platform, architecture, and
+shared/static linkage. On macOS, the adjacent checksum can be checked with
+`shasum -a 256 -c <asset>.sha256`.
+
+The Windows static package has an additional consumer contract because OCCT
+8.0.1's installed CMake package does not propagate all static-link requirements.
+Static consumers must define `OCCT_STATIC_BUILD` and `OCCT_NO_PLUGINS` and link
+`advapi32;gdi32;user32;wsock32;psapi;windowscodecs;winmm` in addition to
+`${OpenCASCADE_LIBRARIES}`. For example:
+
+```cmake
+target_compile_definitions(my_target PRIVATE OCCT_STATIC_BUILD OCCT_NO_PLUGINS)
+target_link_libraries(my_target PRIVATE ${OpenCASCADE_LIBRARIES}
+  advapi32 gdi32 user32 wsock32 psapi windowscodecs winmm)
+```
 
 ## Source provenance
 

@@ -107,8 +107,7 @@ jobs:
             .github/macos-occt-sdk/run-consumer.sh \
             .github/macos-occt-sdk/select-toolchain.sh \
             .github/macos-occt-sdk/validate-artifact.sh \
-            .github/macos-occt-sdk/verify-release-assets.sh \
-            .github/macos-occt-sdk/verify-tag.sh; do
+            .github/macos-occt-sdk/verify-release-assets.sh; do
             bash -n "$script"
           done
           python3 -m py_compile .github/macos-occt-sdk/sdk_tools.py

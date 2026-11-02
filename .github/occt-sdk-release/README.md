@@ -218,25 +218,28 @@ run directly from the automation branch.
 
 In `.github/workflows/build-linux-packages.yml`:
 
-- keep `main` as the automation branch;
+- keep the reusable `workflow_call` inputs and manual `workflow_dispatch` entry
+  point; this producer does not run on ordinary pushes;
 - if advancing the direct-run baseline, change the `workflow_dispatch` defaults
-  and the corresponding fallback values used by branch-triggered runs;
+  and the corresponding fallback values used when no explicit input is supplied;
 - review the manylinux producer image tag/digest and glibc baseline. Keep the
   existing pin if it is still the intended reproducible producer.
 
 In `.github/workflows/build-macos-packages.yml`:
 
-- keep `main` as the automation branch;
+- keep the reusable `workflow_call` inputs and manual `workflow_dispatch` entry
+  point; this producer does not run on ordinary pushes;
 - if advancing the direct-run baseline, change the `workflow_dispatch` defaults
-  and the corresponding fallback values used by branch-triggered runs;
+  and the corresponding fallback values used when no explicit input is supplied;
 - review the macOS runner labels, Xcode pin, CMake pin, and deployment target.
   Change them only deliberately and validate both architectures after doing so.
 
 In `.github/workflows/build-windows-packages.yml`:
 
-- keep `main` as the automation branch;
+- keep the reusable `workflow_call` inputs and manual `workflow_dispatch` entry
+  point; this producer does not run on ordinary pushes;
 - if advancing the direct-run baseline, change the `workflow_dispatch` defaults
-  and the corresponding fallback values used by branch-triggered runs;
+  and the corresponding fallback values used when no explicit input is supplied;
 - review the Windows runner/toolchain and the lean shared/static toolkit closure;
 - review `.github/windows-occt-sdk/` alongside the workflow; the configure and
   installed-SDK validation logic is shared by both Windows linkage jobs there;
@@ -248,7 +251,8 @@ In `.github/workflows/build-windows-packages.yml`:
 
 In `.github/workflows/validate-lean-profile.yml`:
 
-- keep `main` in the pull-request and push branch filters;
+- keep `main` in the pull-request branch filter; this workflow has no push
+  trigger;
 - keep its path filters synchronized with every file that duplicates values from
   `.github/occt-sdk-release/lean-profile.json`.
 
@@ -335,11 +339,11 @@ qualification against the current stable upstream release. Pull-request refs can
 never enter the publish job, so this exercises the full reusable
 build/qualification path without creating a tag or GitHub Release.
 
-Ordinary pushes to the configured producer branches start a producer only when that
-producer's workflow or helper paths change. Documentation-only commits and
-unrelated branch changes therefore do not launch SDK builds. Never use a skip
-marker for changes that affect release workflows, helpers, source pins, or
-package contents when a qualification run is required.
+The platform producers do not run on ordinary pushes. The combined orchestrator
+invokes them through `workflow_call`, and they can also be run directly through
+`workflow_dispatch` for focused qualification. Pull requests that touch the
+release automation paths above exercise the combined qualification path; use a
+manual dispatch when qualification is needed outside those pull-request filters.
 
 ## Creating the combined release
 
@@ -563,10 +567,11 @@ The installed static SDK must contain:
   linkage, toolkit closure, and the required consumer settings;
 - an adjacent SHA-256 checksum for the final ZIP.
 
-The successful 8.0.1 qualification measured the 28 static OCCT libraries at
-`548862194` bytes (523.436 MiB). The compressed published static SDK ZIP is
-`118774584` bytes (113.272 MiB). These sizes are evidence for this release,
-not fixed requirements for future OCCT/toolchain versions.
+The legacy r2 8.0.1 qualification measured the 28 static OCCT libraries at
+`548862194` bytes (523.436 MiB), and its compressed static SDK ZIP was
+`118774584` bytes (113.272 MiB). The canonical standalone `occt-sdk-8.0.1`
+static ZIP is `118774326` bytes. These sizes are release evidence, not fixed
+requirements for future OCCT/toolchain versions.
 
 ### MSVC runtime contract
 

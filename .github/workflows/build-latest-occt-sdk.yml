@@ -568,7 +568,7 @@ jobs:
           if gh api \
             -H "X-GitHub-Api-Version: $api_version" \
             "repos/$GITHUB_REPOSITORY/git/ref/tags/$INTENDED_RELEASE_TAG" >/dev/null 2>&1; then
-            bash .github/linux-occt-sdk/verify-tag.sh "$INTENDED_RELEASE_TAG" "$WORKFLOW_SHA" >/dev/null
+            bash .github/occt-sdk-release/verify-tag.sh "$INTENDED_RELEASE_TAG" "$WORKFLOW_SHA" >/dev/null
           else
             gh api -X POST \
               -H "X-GitHub-Api-Version: $api_version" \
@@ -576,7 +576,7 @@ jobs:
               -f ref="refs/tags/$INTENDED_RELEASE_TAG" \
               -f sha="$WORKFLOW_SHA" >/dev/null
           fi
-          bash .github/linux-occt-sdk/verify-tag.sh "$INTENDED_RELEASE_TAG" "$WORKFLOW_SHA" >/dev/null
+          bash .github/occt-sdk-release/verify-tag.sh "$INTENDED_RELEASE_TAG" "$WORKFLOW_SHA" >/dev/null
           bash .github/occt-sdk-release/verify-release-assets.sh "$RUNNER_TEMP/release-assets"
 
           mapfile -t sdk_assets < <(find "$RUNNER_TEMP/release-assets" -type f -print | sort)
@@ -627,7 +627,7 @@ jobs:
             echo "upstream tag moved while the draft was being uploaded: expected $SOURCE_SHA, now $current_source_sha" >&2
             exit 1
           fi
-          bash .github/linux-occt-sdk/verify-tag.sh "$INTENDED_RELEASE_TAG" "$WORKFLOW_SHA" >/dev/null
+          bash .github/occt-sdk-release/verify-tag.sh "$INTENDED_RELEASE_TAG" "$WORKFLOW_SHA" >/dev/null
           gh api -X PATCH \
             -H "X-GitHub-Api-Version: $api_version" \
             "repos/$GITHUB_REPOSITORY/releases/$draft_id" \
@@ -651,7 +651,7 @@ jobs:
             actual="$(jq -r --arg name "$name" '.assets[] | select(.name == $name) | .digest' <<<"$release_json")"
             test "$actual" = "$expected"
           done
-          bash .github/linux-occt-sdk/verify-tag.sh "$INTENDED_RELEASE_TAG" "$WORKFLOW_SHA" >/dev/null
+          bash .github/occt-sdk-release/verify-tag.sh "$INTENDED_RELEASE_TAG" "$WORKFLOW_SHA" >/dev/null
           trap - EXIT
 
           {

@@ -30,9 +30,7 @@ for linkage in shared static; do
   checksum="$archive.sha256"
   test -f "$archive"
   test -f "$checksum"
-  expected="$(awk '{print $1}' "$checksum" | tr -d '\r')"
-  actual="$(sha256sum "$archive" | awk '{print $1}')"
-  test "$expected" = "$actual"
+  (cd "$asset_root" && sha256sum -c "$(basename "$checksum")")
   manifest="$(tar -xOzf "$archive" --wildcards '*/build-manifest.json')"
   test "$(jq -r '.occt.commit' <<<"$manifest")" = "$SOURCE_SHA"
   test "$(jq -r '.occt.event_sha' <<<"$manifest")" = "$WORKFLOW_SHA"

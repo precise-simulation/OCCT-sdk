@@ -108,7 +108,7 @@ jobs:
           bash -n .github/linux-occt-sdk/run-consumer.sh
           bash -n .github/linux-occt-sdk/validate-artifact.sh
           bash -n .github/linux-occt-sdk/verify-release-assets.sh
-          bash -n .github/linux-occt-sdk/verify-tag.sh
+          bash -n .github/occt-sdk-release/verify-tag.sh
           python3 -m py_compile .github/linux-occt-sdk/sdk_tools.py
 
   build:
