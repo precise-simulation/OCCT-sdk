@@ -47,6 +47,19 @@ SDK independently pins the official OCCT release commit.
 This separation is intentional: release automation can be fixed without changing
 the OCCT source being packaged.
 
+## Canonical standalone 8.0.1 release
+
+The immutable `occt-sdk-8.0.1` release in this repository was published on
+2026-11-02 after the complete Windows, Linux, and macOS qualification matrix
+passed. Its release tag points directly to automation revision
+`84bfd579cf6f660a63e4cad06a6c23742df579c3`, and all packages use official
+upstream OCCT `V8.0.1` source commit
+`b8f597c677811d1f9f4d8a97f5ae2825c0353a42`.
+
+The release contains the current 18-asset shape: 16 SDK package/checksum files
+plus the exact upstream source archive and adjacent checksum. This is the
+baseline 8.0.1 release that new consumers should use.
+
 ## Legacy 8.0.1 validation provenance
 
 Before this standalone repository was created, the 8.0.1 SDK work was published

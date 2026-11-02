@@ -23,6 +23,16 @@ Platform-specific build and verification helpers live under
 `.github/*-occt-sdk/`. Release policy, verification, and recovery material
 live under `.github/occt-sdk-release/`.
 
+## Current release
+
+`occt-sdk-8.0.1` is the canonical baseline release for new consumers. It was
+qualified and published from automation revision
+`84bfd579cf6f660a63e4cad06a6c23742df579c3` using official upstream OCCT
+`V8.0.1` source commit `b8f597c677811d1f9f4d8a97f5ae2825c0353a42`.
+The immutable release contains 18 assets: the qualified Windows, Linux, and
+macOS SDK packages and checksums plus the exact upstream source archive and
+checksum.
+
 ## Source provenance
 
 The automation keeps the workflow revision and OCCT source revision separate:
