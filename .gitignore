@@ -1,0 +1,24 @@
+# Local agent/worktree metadata
+/.cos-worktree-auto/
+/AGENTS.md
+/.CLAUDE.md
+/.AGENT.md
+/.GEMINI.md
+/.COPILOT.md
+/.CURSOR.md
+/.CODEIUM.md
+/.TABNINE.md
+/.CHATGPT.md
+/.BARD.md
+/.PERPLEXITY.md
+/.CONTINUE.md
+/.AIDER.md
+/.WINDSURF.md
+
+# Common local/editor artifacts
+/.vscode/
+/.idea/
+**/__pycache__/
+*.pyc
+.DS_Store
+*~
