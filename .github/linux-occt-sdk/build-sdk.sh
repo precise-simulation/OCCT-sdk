@@ -130,6 +130,9 @@ cmake -S "$source_dir" -B "$build_dir" "${cmake_options[@]}"
 cmake --build "$build_dir" --parallel 4
 cmake --install "$build_dir" --config Release
 
+"$python_bin" "$script_dir/../occt-sdk-release/normalize-installed-config.py" \
+  "$prefix/lib/cmake/opencascade/OpenCASCADEConfig.cmake"
+
 "$python_bin" - "$prefix/bin/env.sh" <<'PY'
 import pathlib
 import re

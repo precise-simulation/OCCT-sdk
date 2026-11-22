@@ -89,6 +89,9 @@ jobs:
           $ErrorActionPreference = 'Stop'
           cmake --build $env:OCCT_SHARED_BUILD --target install --config Release --parallel 2
           if ($LASTEXITCODE -ne 0) { throw 'OCCT build/install failed.' }
+          python (Join-Path $env:GITHUB_WORKSPACE 'automation/.github/occt-sdk-release/normalize-installed-config.py') `
+            (Join-Path $env:OCCT_SHARED_ROOT 'cmake/OpenCASCADEConfig.cmake')
+          if ($LASTEXITCODE -ne 0) { throw 'OpenCASCADEConfig.cmake normalization failed.' }
 
       - name: Verify shared toolkit closure and dependencies
         shell: pwsh
@@ -394,6 +397,9 @@ jobs:
           $ErrorActionPreference = 'Stop'
           cmake --build $env:OCCT_BUILD --target install --config Release --parallel 2
           if ($LASTEXITCODE -ne 0) { throw 'OCCT build/install failed.' }
+          python (Join-Path $env:GITHUB_WORKSPACE 'automation/.github/occt-sdk-release/normalize-installed-config.py') `
+            (Join-Path $env:OCCT_ROOT 'cmake/OpenCASCADEConfig.cmake')
+          if ($LASTEXITCODE -ne 0) { throw 'OpenCASCADEConfig.cmake normalization failed.' }
 
       - name: Verify static toolkit closure and footprint
         shell: pwsh
