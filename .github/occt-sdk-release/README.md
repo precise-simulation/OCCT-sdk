@@ -143,7 +143,7 @@ Do not import upstream development branches or source history merely because the
 development version has advanced. SDK releases in this repository are intended
 to correspond to identifiable upstream release tags.
 
-As of 2026-11-02, the latest upstream stable GitHub Release is `V8.0.1`.
+As of 2026-11-22, the latest upstream stable GitHub Release is `V8_0_2`.
 Upstream `master` identifies itself as `8.1.0-dev1`, so 8.1 is the next
 development line but is not yet a stable release to package.
 
@@ -155,8 +155,8 @@ For automatic qualification and publication, the normal policy is:
    Prerelease qualification is a separate deliberate process and must not reuse
    the stable-release publication path implicitly.
 4. Read the GitHub Release's actual `tag_name`; do not derive the tag from its
-   display name. For example, the 8.0.1 release name is `V8_0_1` while its
-   actual tag is `V8.0.1`.
+   display name. Upstream has used both dotted and underscored stable tags: the
+   8.0.1 release tag is `V8.0.1`, while the 8.0.2 release tag is `V8_0_2`.
 5. Peel the published tag to its exact commit and build that commit directly
    from `Open-Cascade-SAS/OCCT`.
 6. Let the existing lean-profile checks decide whether the release still matches
@@ -190,7 +190,7 @@ a compatibility change, verify all of the following before editing the profile
 or platform baselines:
 
 1. OCCT version, for example `8.0.1`.
-2. Upstream GitHub Release tag, for example `V8.0.1`.
+2. Upstream GitHub Release tag, for example `V8.0.1` or `V8_0_2`.
 3. The commit to which that upstream tag resolves after peeling annotated tags.
 
 Useful checks are:

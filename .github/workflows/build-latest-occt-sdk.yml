@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
     inputs:
       upstream_tag:
-        description: Optional exact stable upstream tag (for example V8.0.1); empty means latest stable release
+        description: Optional exact stable upstream tag (for example V8.0.1 or V8_0_2); empty means latest stable release
         required: false
         type: string
       force_qualify:
@@ -66,11 +66,13 @@ jobs:
           test "$(jq -r '.draft' <<<"$release_json")" = "false"
           test "$(jq -r '.prerelease' <<<"$release_json")" = "false"
           upstream_tag="$(jq -r '.tag_name' <<<"$release_json")"
-          if [[ ! "$upstream_tag" =~ ^V([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+          if [[ "$upstream_tag" =~ ^V([0-9]+)\.([0-9]+)\.([0-9]+)$ ]] ||
+             [[ "$upstream_tag" =~ ^V([0-9]+)_([0-9]+)_([0-9]+)$ ]]; then
+            occt_version="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
+          else
             echo "unsupported stable OCCT tag: $upstream_tag" >&2
             exit 1
           fi
-          occt_version="${BASH_REMATCH[1]}"
 
           object_json="$(gh api "repos/$UPSTREAM_REPOSITORY/git/ref/tags/$upstream_tag")"
           object_type="$(jq -r '.object.type' <<<"$object_json")"
