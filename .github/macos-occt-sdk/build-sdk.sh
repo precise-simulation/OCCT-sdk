@@ -108,6 +108,9 @@ parallel="$(sysctl -n hw.logicalcpu)"
 cmake --build "$build_dir" --parallel "$parallel"
 cmake --install "$build_dir" --config Release
 
+python3 "$OCCT_AUTOMATION_DIR/.github/occt-sdk-release/normalize-installed-config.py" \
+  "$prefix/lib/cmake/opencascade/OpenCASCADEConfig.cmake"
+
 python3 "$script_dir/sdk_tools.py" normalize-env --path "$prefix/bin/env.sh"
 if [[ "$linkage" == "static" ]]; then
   python3 "$script_dir/sdk_tools.py" normalize-static-frameworks \
