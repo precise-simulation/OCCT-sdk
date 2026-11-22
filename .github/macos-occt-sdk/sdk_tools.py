@@ -487,8 +487,12 @@ def normalize_static_frameworks(args):
             target.write_text(changed, encoding="utf-8", newline="\n")
 
     config_text = config.read_text(encoding="utf-8")
-    marker = "# Import OpenCASCADE targets."
-    require(marker in config_text, "could not locate target import marker in OpenCASCADEConfig.cmake")
+    markers = (
+        "# Import OpenCASCADE targets.",
+        "set (_occt_import_modules ${_occt_requested_modules})",
+    )
+    marker = next((value for value in markers if value in config_text), None)
+    require(marker is not None, "could not locate target import marker in OpenCASCADEConfig.cmake")
     require("OpenCASCADE_AppKit_FRAMEWORK" not in config_text, "framework normalization block already present")
     block = """# Resolve Apple frameworks on the consumer host for relocatable static targets.
 if(APPLE)
